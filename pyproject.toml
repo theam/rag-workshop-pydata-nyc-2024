@@ -1,0 +1,15 @@
+[project]
+name = "rag-workshop-pydata-nyc-2024"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "langchain>=0.3.4",
+    "langchain-community>=0.3.3",
+    "pypdf>=5.0.1",
+    "langchain-openai>=0.2.3",
+    "chromadb>=0.5.15",
+    "langchain-chroma>=0.1.4",
+    "textual>=0.83.0",
+]
