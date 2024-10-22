@@ -2089,6 +2089,7 @@ dependencies = [
     { name = "langchain-chroma" },
     { name = "langchain-community" },
     { name = "langchain-openai" },
+    { name = "pydantic" },
     { name = "pypdf" },
     { name = "textual" },
 ]
@@ -2100,6 +2101,7 @@ requires-dist = [
     { name = "langchain-chroma", specifier = ">=0.1.4" },
     { name = "langchain-community", specifier = ">=0.3.3" },
     { name = "langchain-openai", specifier = ">=0.2.3" },
+    { name = "pydantic", specifier = ">=2.9.2" },
     { name = "pypdf", specifier = ">=5.0.1" },
     { name = "textual", specifier = ">=0.83.0" },
 ]

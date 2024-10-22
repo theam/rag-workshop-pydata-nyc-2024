@@ -12,4 +12,5 @@ dependencies = [
     "chromadb>=0.5.15",
     "langchain-chroma>=0.1.4",
     "textual>=0.83.0",
+    "pydantic>=2.9.2",
 ]

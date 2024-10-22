@@ -1,7 +1,7 @@
 from rich.text import Text
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical
-from textual.widgets import Input, Button, Label, Static, DataTable, Rule, ListItem, ListView
+from textual.widgets import Input, Label, Static, DataTable
 
 
 ROWS = [
@@ -65,7 +65,11 @@ class SearchApp(App):
                 yield Static("You: Message", classes="user_message")
                 yield Static("Assistant: Message", classes="assistant_message")
                 yield Static("You: Message", classes="user_message")
-                yield Input(placeholder="Chat with the book", id="chat_input", classes="ChatInput")
+                yield Input(
+                    placeholder="Chat with the book",
+                    id="chat_input",
+                    classes="ChatInput",
+                )
 
     def on_mount(self):
         table = self.query_one(DataTable)
@@ -77,7 +81,7 @@ class SearchApp(App):
             ]
             table.add_row(*styled_row)
 
+
 if __name__ == "__main__":
     app = SearchApp()
     app.run()
-
