@@ -2,6 +2,7 @@ from rich.text import Text
 from textual import on
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical
+from textual.reactive import Reactive
 from textual.widgets import Input, Label, Static, DataTable
 
 
@@ -136,8 +137,8 @@ class SearchApp(App):
             self.reset_table()
             return
         self.embedding_search = event.value
-        results = self.workshop_instance.embedding_search(self.embedding_search)
         table = self.query_one(DataTable)
+        results = self.workshop_instance.embedding_search(self.embedding_search)
         table.clear()
         for doc in results:
             text = Text((doc.page_content).replace("\n", " "))
