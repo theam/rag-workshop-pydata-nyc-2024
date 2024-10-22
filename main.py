@@ -1,5 +1,4 @@
-from workshop.chunk import Chunk
-from langchain import Document
+from langchain_core.documents.base import Document
 from langchain_core.runnables.base import Runnable
 from langchain_core.vectorstores import VectorStore
 from langchain_core.language_models.chat_models import BaseChatModel
@@ -13,7 +12,7 @@ from uuid import uuid4
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
-
+from workshop.ui import SearchApp
 
 # This is the PDF file that will be used as the
 # knowledge base. Feel free to change it to any
@@ -44,11 +43,23 @@ class Workshop:
     method body.
     """
 
-    raw_documents: list[Document]
-    documents: list[Document]
+    raw_documents: list[Document] = []
+    documents: list[Document] = []
     model: BaseChatModel
     store: VectorStore
     rag: Runnable
+
+    def textual_search(self, query: str):
+        """
+        Textual search function for comparing the
+        results with the semantic search function.
+        """
+        results = []
+        for doc in self.documents:
+            match = re.match(query, doc.page_content)
+            if match:
+                results.append(doc)
+        return results
 
     def load_documents(self):
         loader = PyPDFLoader(DOCUMENT_PATH)
@@ -59,14 +70,6 @@ class Workshop:
             chunk_size=1000, chunk_overlap=200
         )
         self.documents = text_splitter.split_documents(self.raw_documents)
-
-    def textual_search(self, query: str):
-        results = []
-        for doc in self.documents:
-            match = re.match(query, doc.page_contents)
-            if match:
-                results.append(doc)
-        return results
 
     def load_model(self):
         self.model = ChatOpenAI(model="gpt-4o")
@@ -94,3 +97,8 @@ class Workshop:
     def semantic_search(self, query: str):
         results = self.rag.invoke({"input": query})
         return results
+
+
+if __name__ == "__main__":
+    app = SearchApp(Workshop())
+    app.run()
