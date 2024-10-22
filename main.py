@@ -56,7 +56,7 @@ class Workshop:
         """
         results = []
         for doc in self.documents:
-            match = re.match(query, doc.page_content)
+            match = re.search(query.lower(), doc.page_content.lower(), re.MULTILINE)
             if match:
                 results.append(doc)
         return results
@@ -93,6 +93,10 @@ class Workshop:
         question_answer_chain = create_stuff_documents_chain(self.model, prompt)
         retriever = self.store.as_retriever()
         self.rag = create_retrieval_chain(retriever, question_answer_chain)
+
+    def embedding_search(self, query: str):
+        results = self.store.as_retriever().invoke(query)
+        return results
 
     def semantic_search(self, query: str):
         results = self.rag.invoke({"input": query})
