@@ -149,3 +149,6 @@ class SearchApp(App):
         chat_box.mount(
             Static(f"Assistant: {str(results['answer'])}", classes="assistant_message")
         )
+        # Clear the input field after submission
+        chat_input_widget = self.query_one("#chat_input")
+        chat_input_widget.value = ""
