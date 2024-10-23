@@ -1,7 +1,7 @@
 from rich.text import Text
 from textual import on
 from textual.app import App, ComposeResult
-from textual.containers import Horizontal, Vertical
+from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.reactive import Reactive
 from textual.widgets import Input, Label, Static, DataTable
 
@@ -12,10 +12,7 @@ class SearchApp(App):
         margin: 0;
     }
     #chat_box {
-        width: 50%;
-        margin: 1;
         border: solid white;
-        padding: 1;
     }
     #chat_input {
         width: 100%;
@@ -30,8 +27,7 @@ class SearchApp(App):
         background: blue 30%;
         content-align: left middle;
     }
-    Vertical {
-        border: solid white;
+    .column {
     }
     Horizontal {
         border: none;
@@ -79,21 +75,20 @@ class SearchApp(App):
             yield Label("Textual Search:")
             yield Input(placeholder="Enter text search here", id="textual_search")
 
-            if "semantic_search" in dir(self.workshop_instance):
+            if "embedding_search" in dir(self.workshop_instance):
                 yield Label("Embedding Search:")
                 yield Input(
                     placeholder="Enter embedding search here", id="embedding_search"
                 )
 
             with Horizontal():
-                with Vertical():
+                with Vertical(classes="column"):
                     if len(self.workshop_instance.documents) > 0:
                         yield DataTable()
-                with Vertical():
-                    if "semantic_search" in dir(self.workshop_instance):
-                        yield Static("You: Message", classes="user_message")
-                        yield Static("Assistant: Message", classes="assistant_message")
-                        yield Static("You: Message", classes="user_message")
+                with Vertical(classes="column"):
+                    if "do_chat" in dir(self.workshop_instance):
+                        with VerticalScroll(id="chat_box"):
+                            pass
                         yield Input(
                             placeholder="Chat with the book",
                             id="chat_input",
@@ -105,15 +100,22 @@ class SearchApp(App):
         table.add_columns("Page", "Text")
         self.reset_table()
 
+    def render_docs(self, docs: list[dict[str, str]]):
+        table = self.query_one(DataTable)
+        table.clear()
+        for doc in docs:
+            text = Text((doc["content"]).replace("\n", " "))
+            page = Text(str(doc["page"]), style="italic #03AC13", justify="right")
+            table.add_row(page, text)
+
     def reset_table(self):
         table = self.query_one(DataTable)
         table.clear()
-        for doc in self.workshop_instance.documents:
-            text = Text((doc.page_content).replace("\n", " "))
-            page = Text(
-                str(doc.metadata["page"]), style="italic #03AC13", justify="right"
-            )
-            table.add_row(page, text)
+        all_docs = [
+            {"content": doc.page_content, "page": doc.metadata["page"]}
+            for doc in self.workshop_instance.documents
+        ]
+        self.render_docs(all_docs)
 
     @on(Input.Submitted, "#textual_search")
     def on_textual_input_submitted(self, event: Input.Submitted):
@@ -124,12 +126,11 @@ class SearchApp(App):
         results = self.workshop_instance.textual_search(self.textual_search)
         table = self.query_one(DataTable)
         table.clear()
-        for doc in results:
-            text = Text((doc.page_content).replace("\n", " "))
-            page = Text(
-                str(doc.metadata["page"]), style="italic #03AC13", justify="right"
-            )
-            table.add_row(page, text)
+        docs = [
+            {"content": doc.page_content, "page": doc.metadata["page"]}
+            for doc in results
+        ]
+        self.render_docs(docs)
 
     @on(Input.Submitted, "#embedding_search")
     def on_embedding_input_submitted(self, event: Input.Submitted):
@@ -140,9 +141,25 @@ class SearchApp(App):
         table = self.query_one(DataTable)
         results = self.workshop_instance.embedding_search(self.embedding_search)
         table.clear()
-        for doc in results:
-            text = Text((doc.page_content).replace("\n", " "))
-            page = Text(
-                str(doc.metadata["page"]), style="italic #03AC13", justify="right"
-            )
-            table.add_row(page, text)
+        docs = [
+            {"content": doc.page_content, "page": doc.metadata["page"]}
+            for doc in results
+        ]
+        self.render_docs(docs)
+
+    @on(Input.Submitted, "#chat_input")
+    def on_chat_input_submitted(self, event: Input.Submitted):
+        if event.value == "":
+            return
+        chat_input = event.value
+        chat_box = self.query_one("#chat_box")
+        chat_box.mount(Static(f"You: {chat_input}", classes="user_message"))
+        results = self.workshop_instance.do_chat(chat_input)
+        docs = [
+            {"content": doc.page_content, "page": doc.metadata["page"]}
+            for doc in results["context"]
+        ]
+        self.render_docs(docs)
+        chat_box.mount(
+            Static(f"Assistant: {str(results['answer'])}", classes="assistant_message")
+        )

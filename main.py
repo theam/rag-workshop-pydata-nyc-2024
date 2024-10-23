@@ -98,8 +98,8 @@ class Workshop:
         results = self.store.as_retriever().invoke(query)
         return results
 
-    def semantic_search(self, query: str):
-        results = self.rag.invoke({"input": query})
+    def do_chat(self, input: str):
+        results = self.rag.invoke({"input": input})
         return results
 
 
