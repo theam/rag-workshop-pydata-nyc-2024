@@ -96,9 +96,10 @@ class SearchApp(App):
                         )
 
     def on_mount(self):
-        table = self.query_one(DataTable)
-        table.add_columns("Page", "Text")
-        self.reset_table()
+        if "split_documents" in dir(self.workshop_instance):
+            table = self.query_one(DataTable)
+            table.add_columns("Page", "Text")
+            self.reset_table()
 
     def render_docs(self, docs):
         table = self.query_one(DataTable)

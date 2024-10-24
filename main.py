@@ -61,46 +61,29 @@ class Workshop:
                 results.append(doc)
         return results
 
-    def load_documents(self):
-        loader = PyPDFLoader(DOCUMENT_PATH)
-        self.raw_documents = loader.load()
+    def _load_documents(self):
+        pass
 
-    def split_documents(self):
-        text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=1000, chunk_overlap=200
-        )
-        self.documents = text_splitter.split_documents(self.raw_documents)
+    def _split_documents(self):
+        pass
 
-    def load_model(self):
-        self.model = ChatOpenAI(model="gpt-4o")
+    def _load_model(self):
+        pass
 
-    def init_store(self):
-        self.store = Chroma(
-            collection_name="workshop", embedding_function=OpenAIEmbeddings()
-        )
+    def _init_store(self):
+        pass
 
-    def add_documents(self):
-        uuids = [str(uuid4()) for _ in range(len(self.documents))]
-        self.store.add_documents(documents=self.documents, ids=uuids)
+    def _add_documents(self):
+        pass
 
-    def init_rag(self):
-        prompt = ChatPromptTemplate(
-            [
-                ("system", SYSTEM_PROMPT),
-                ("human", "{input}"),
-            ]
-        )
-        question_answer_chain = create_stuff_documents_chain(self.model, prompt)
-        retriever = self.store.as_retriever()
-        self.rag = create_retrieval_chain(retriever, question_answer_chain)
+    def _init_rag(self):
+        pass
 
-    def embedding_search(self, query: str):
-        results = self.store.as_retriever().invoke(query)
-        return results
+    def _embedding_search(self, query: str):
+        pass
 
-    def do_chat(self, input: str):
-        results = self.rag.invoke({"input": input})
-        return results
+    def _do_chat(self, input: str):
+        pass
 
 
 if __name__ == "__main__":
