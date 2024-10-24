@@ -13,4 +13,5 @@ dependencies = [
     "langchain-chroma>=0.1.4",
     "textual>=0.83.0",
     "pydantic>=2.9.2",
+    "deepeval>=1.4.4",
 ]
