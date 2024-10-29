@@ -56,6 +56,14 @@ Now, use `uv` to install all dependencies in one go. This will automatically han
 uv build
 ```
 
+### 4. Setup an OpenAI API key
+
+Duplicate the `.env.example` file into `.env` and replace your API key under `.env`:
+
+```sh
+cp .env.example .env
+```
+
 ## What We'll Be Doing
 
 We'll start with a skeleton code that outlines the structure of our RAG system. The `Workshop` class contains methods that we'll implement one by one:
@@ -83,7 +91,7 @@ This will launch the application, and you'll be able to interact with your AI as
 
 ## Additional Information
 
-- **OpenAI API Key**: If you're using OpenAI's language models, ensure you have your API key set up in your environment variables.
+- **OpenAI API Key**: Ensure you cop
 
   ```bash
   export OPENAI_API_KEY='your-api-key-here'

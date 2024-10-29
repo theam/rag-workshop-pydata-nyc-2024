@@ -14,6 +14,11 @@ from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
 from workshop.ui import SearchApp
 
+# load dotenv
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # This is the PDF file that will be used as the
 # knowledge base. Feel free to change it to any
 # other PDF file you want to use.
