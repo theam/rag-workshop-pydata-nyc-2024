@@ -53,7 +53,7 @@ cd rag-workshop-pydata-nyc-2024
 Now, use `uv` to install all dependencies in one go. This will automatically handle environment setup and package installation for you:
 
 ```bash
-uv install
+uv build
 ```
 
 ## What We'll Be Doing
@@ -91,7 +91,7 @@ This will launch the application, and you'll be able to interact with your AI as
 
   _Replace `'your-api-key-here'` with your actual OpenAI API key._
 
-- **PDF File**: The PDF file `"data/unix_haters_handbook.pdf"` is already included in the repository under the `data` directory.
+- **PDF File**: The PDF file `"unix_haters_handbook.pdf"` is already included in the repository under the `data` directory.
 
 - **Dependencies**: The code relies on several packages from `langchain`, `openai`, and other libraries. `uv install` will ensure all necessary dependencies are handled.
 

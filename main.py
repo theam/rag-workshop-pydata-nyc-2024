@@ -17,7 +17,7 @@ from workshop.ui import SearchApp
 # This is the PDF file that will be used as the
 # knowledge base. Feel free to change it to any
 # other PDF file you want to use.
-DOCUMENT_PATH = "data/unix_haters_handbook.pdf"
+DOCUMENT_PATH = "unix_haters_handbook.pdf"
 
 # This is the prompt that will be used
 # to ask the model to answer the questions.
