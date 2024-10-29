@@ -32,7 +32,11 @@ We'll use `uv`, a Python tool that simplifies environment management and package
 Install `uv` using the following command:
 
 ```bash
-pip install uv
+# On Windows
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+
+# On MacOS/Linux/WSL2
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
 ### 2. Clone the Repository
